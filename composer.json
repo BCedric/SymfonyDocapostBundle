@@ -19,5 +19,6 @@
     "symfony/config": "^6.0|^7.0",
     "symfony/dependency-injection": "^6.0|^7.0",
     "symfony/http-kernel": "^6.0|^7.0"
-  }
+  },
+  "target-dir": "BCedric/DocapostBundle"
 }
