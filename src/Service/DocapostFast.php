@@ -23,12 +23,21 @@ class DocapostFast
      * @param HttpClientInterface $client
      * @param array $parameters
      */
-    public function __construct(HttpClientInterface $client, array $parameters)
-    {
+    public function __construct(
+        HttpClientInterface $client,
+        string $pem_file,
+        string $pem_password,
+        string $url,
+        string $siren,
+        string $circuitId,
+
+    ) {
         $this->client = $client;
-        foreach ($parameters as $key => $val) {
-            $this->$key = $val;
-        }
+        $this->pem_file = $pem_file;
+        $this->pem_password = $pem_password;
+        $this->url = $url;
+        $this->siren = $siren;
+        $this->circuitId = $circuitId;
     }
 
     public function delete(string $documentId)
