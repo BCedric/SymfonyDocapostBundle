@@ -6,7 +6,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 
-class BCedricDocapostExtension extends Extension implements PrependExtensionInterface {
+class BCedricDocapostExtension extends Extension implements PrependExtensionInterface
+{
     /**
      * @param array $configs
      * @param ContainerBuilder $container
@@ -17,11 +18,12 @@ class BCedricDocapostExtension extends Extension implements PrependExtensionInte
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $authenticator = $container->autowire(
-            'bcedric.docapost',
-            'BCedric\SymfonyDocapostBundle\Service\DocapostFast'
+        $docapost = $container->autowire(
+            'bcedric_docapost',
+            'BCedric\DocapostBundle\Service\DocapostFast'
         );
-        $authenticator->setArguments(array($config));
+        $docapost->setPublic(true);
+        $docapost->setArguments(array($config));
     }
 
     /**
