@@ -1,6 +1,6 @@
 <?php
 
-namespace BCedric\SymfonyDocapostBundle\Service;
+namespace BCedric\DocapostBundle\Service;
 
 use Exception;
 use Symfony\Component\Mime\Part\DataPart;
