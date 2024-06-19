@@ -2,7 +2,7 @@
   "name": "bcedric/docapost",
   "autoload": {
     "psr-4": {
-      "Bcedric\\Docapost\\": "src/"
+      "BCedric\\DocapostBundle": ""
     }
   },
   "authors": [
