@@ -19,7 +19,7 @@ class BCedricDocapostExtension extends Extension implements PrependExtensionInte
         $config = $this->processConfiguration($configuration, $configs);
 
         $docapost = $container->autowire(
-            'bcedric_docapost',
+            'bcedric.docapost',
             'BCedric\DocapostBundle\Service\DocapostFast'
         );
         $docapost->setPublic(true);
