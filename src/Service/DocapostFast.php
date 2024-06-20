@@ -40,6 +40,64 @@ class DocapostFast
         $this->circuitId = $circuitId;
     }
 
+    public function getSignInfo($documentiId)
+    {
+        $history = $this->history($documentiId);
+        $numOfSign = count(array_filter($history, function ($step) {
+            return $step['userFullname'] != '' && ($step['stateName'] === 'OTP signé' || $step['stateName'] === 'Visa approuvé' || $step['stateName'] === 'Signé');
+        }));
+        $lastStep = end($history);
+        $isRefused = $lastStep != false && strpos($lastStep['stateName'], 'Refusé') !== false || $lastStep['stateName'] === 'Visa désapprouvé';
+        return [
+            'refusedMessage' => $isRefused ? $this->getRefusalMessage($documentiId) : [],
+            'isRefused' => $isRefused,
+            'nbSignatures' => $numOfSign,
+        ];
+    }
+
+    public function exportUsersData()
+    {
+        $response = $this->sendQuery("GET", "v1/exportUsersData?siren=" . $this->siren);
+        return $response->getContent();
+    }
+
+    public function getUsers(): array
+    {
+        $res = json_decode($this->exportUsersData(), true);
+        $res = array_map(function ($u) {
+            unset($u['circuits']);
+            return $u;
+        }, $res['users']);
+        return array_values($this->filterUsers($res));
+    }
+
+    public function getUsersCertificate(): array
+    {
+        $res = json_decode($this->exportUsersData(), true);
+        $users = $res['users'];
+        $certificat = array_filter($users, function ($u) {
+            if (array_key_exists('circuits', $u)) {
+                $circuit = current($u['circuits']);
+                $habilitation = current($circuit['habilitations']);
+                return $habilitation['profil'] === 'CERTIFICAT';
+            } else {
+                return false;
+            }
+        });
+        $certificat = array_map(function ($u) {
+            unset($u['circuits']);
+            return $u;
+        }, $certificat);
+        return array_values($this->filterUsers($certificat));
+    }
+
+    private function filterUsers(array $list): array
+    {
+        return array_filter($list, function ($u) {
+            return $u['prenom'] !== 'UCA' && $u['nom'] !== 'Test';
+        });
+    }
+
     public function delete(string $documentId)
     {
         $response = $this->sendQuery("DELETE", "v2/$documentId");
