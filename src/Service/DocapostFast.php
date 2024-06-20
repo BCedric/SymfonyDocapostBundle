@@ -192,7 +192,7 @@ class DocapostFast
 
         return $this->client->request(
             $method,
-            $url . $uri,
+            $url . '/parapheur-ws/rest/v1/documents/' . $uri,
             array_merge($parameters, $docapost_params)
         );
     }
