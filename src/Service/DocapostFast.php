@@ -57,7 +57,7 @@ class DocapostFast
 
     public function exportUsersData()
     {
-        $response = $this->sendQuery("GET", "v1/exportUsersData?siren=" . $this->siren);
+        $response = $this->sendQuery("GET", "exportUsersData?siren=" . $this->siren);
         return $response->getContent();
     }
 
@@ -100,7 +100,7 @@ class DocapostFast
 
     public function delete(string $documentId)
     {
-        $response = $this->sendQuery("DELETE", "v2/$documentId");
+        $response = $this->sendQuery("DELETE", "documents/v2/$documentId");
         try {
             return $response->getContent();
         } catch (\Throwable $th) {
@@ -110,31 +110,31 @@ class DocapostFast
 
     public function getRefusalMessage(string $documentId)
     {
-        $response = $this->sendQuery("GET", "v2/$documentId/comments/refusal");
+        $response = $this->sendQuery("GET", "documents/v2/$documentId/comments/refusal");
         return json_decode($response->getContent(), true);
     }
 
     public function getFdc(string $documentId)
     {
-        $response = $this->sendQuery("GET", "v2/$documentId/getFdc");
+        $response = $this->sendQuery("GET", "documents/v2/$documentId/getFdc");
         return $response->getContent();
     }
 
     public function getSmsUrl(string $documentId)
     {
-        $response = $this->sendQuery("GET", "v2/otp/url?id=$documentId");
+        $response = $this->sendQuery("GET", "documents/v2/otp/url?id=$documentId");
         return json_decode($response->getContent(), true);
     }
 
     public function getMetas(string $documentId)
     {
-        $response = $this->sendQuery("GET", "$documentId/metas");
+        $response = $this->sendQuery("GET", "documents/$documentId/metas");
         return $response->getContent();
     }
 
     public function history(string $documentId)
     {
-        $response = $this->sendQuery("GET", "v2/$documentId/history");
+        $response = $this->sendQuery("GET", "documents/v2/$documentId/history");
         return json_decode($response->getContent(), true);
     }
 
@@ -173,7 +173,7 @@ class DocapostFast
         }
         $formData = new FormDataPart($formFields);
 
-        $response = $this->sendQuery("POST", "ondemand/{$this->siren}/upload", [
+        $response = $this->sendQuery("POST", "documents/ondemand/{$this->siren}/upload", [
             'headers' => $formData->getPreparedHeaders()->toArray(),
             "body" => $formData->bodyToIterable()
         ]);
@@ -207,7 +207,7 @@ class DocapostFast
         ];
         $formData = new FormDataPart($formFields);
 
-        $response = $this->sendQuery("POST", "v2/" . $this->siren . "/" . ($circuitId === '' || $circuitId === '0' ? $this->circuitId : $circuitId) . "/upload", [
+        $response = $this->sendQuery("POST", "documents/v2/" . $this->siren . "/" . ($circuitId === '' || $circuitId === '0' ? $this->circuitId : $circuitId) . "/upload", [
             'headers' => $formData->getPreparedHeaders()->toArray(),
             "body" => $formData->bodyToIterable()
         ]);
@@ -224,7 +224,7 @@ class DocapostFast
      */
     public function downloadDocument($id)
     {
-        $response = $this->sendQuery("GET", "v2/$id/download");
+        $response = $this->sendQuery("GET", "documents/v2/$id/download");
         return $response->getContent();
     }
 
@@ -250,7 +250,7 @@ class DocapostFast
 
         return $this->client->request(
             $method,
-            $url . '/parapheur-ws/rest/v1/documents/' . $uri,
+            $url . '/parapheur-ws/rest/v1/' . $uri,
             array_merge($parameters, $docapost_params)
         );
     }
@@ -293,6 +293,6 @@ class DocapostFast
             "body" => $formData->bodyToIterable()
         ];
 
-        return $this->sendQuery("PUT", "v2/otp/$documentId/metadata/define", $parameters);
+        return $this->sendQuery("PUT", "documents/v2/otp/$documentId/metadata/define", $parameters);
     }
 }
