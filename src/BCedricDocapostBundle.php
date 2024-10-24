@@ -17,7 +17,6 @@ class BCedricDocapostBundle extends AbstractBundle
         $definition->rootNode()
             ->children()
             ->scalarNode('pem_file')->end()
-            ->scalarNode('pem_password')->end()
             ->scalarNode('url')->end()
             ->scalarNode('siren')->end()
             ->scalarNode('circuitId')->end()
@@ -30,7 +29,6 @@ class BCedricDocapostBundle extends AbstractBundle
             ->public();
         $builder->autowire(DocapostFast::class)
             ->setArgument('$pem_file', $config['pem_file'])
-            ->setArgument('$pem_password', $config['pem_password'])
             ->setArgument('$url', $config['url'])
             ->setArgument('$siren', $config['siren'])
             ->setArgument('$circuitId', $config['circuitId']);

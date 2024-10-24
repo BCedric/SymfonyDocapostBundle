@@ -13,7 +13,6 @@ class DocapostFast
 {
     private $client;
     private $pem_file;
-    private $pem_password;
     private $url;
     private $siren;
     private $circuitId;
@@ -26,7 +25,6 @@ class DocapostFast
     public function __construct(
         HttpClientInterface $client,
         string $pem_file,
-        string $pem_password,
         string $url,
         string $siren,
         string $circuitId,
@@ -34,7 +32,6 @@ class DocapostFast
     ) {
         $this->client = $client;
         $this->pem_file = $pem_file;
-        $this->pem_password = $pem_password;
         $this->url = $url;
         $this->siren = $siren;
         $this->circuitId = $circuitId;
@@ -244,7 +241,6 @@ class DocapostFast
         $docapost_params =  [
             "local_cert" => $this->pem_file,
             "local_pk" => $this->pem_file,
-            "passphrase" => $this->pem_password,
         ];
         $url = $this->url;
 

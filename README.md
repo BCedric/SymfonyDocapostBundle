@@ -22,7 +22,6 @@ Bundle de connexion d'une application symfony vers le parapheur Docapost Fast
 ```
     b_cedric_docapost:
         pem_file: "path/to/certif.pem"
-        pem_password: "password"
         url: "https://parapheur.url.fr/parapheur-ws/rest/v1/documents/"
         siren: "siren"
         circuitId: "circuit"
