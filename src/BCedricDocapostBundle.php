@@ -19,7 +19,7 @@ class BCedricDocapostBundle extends AbstractBundle
             ->scalarNode('pem_file')->end()
             ->scalarNode('url')->end()
             ->scalarNode('siren')->end()
-            ->scalarNode('circuitId')->end()
+            ->scalarNode('circuitId')->defaultNull()->end()
             ->end();
     }
 
