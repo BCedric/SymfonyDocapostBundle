@@ -11,11 +11,6 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class DocapostFast
 {
-    private $client;
-    private $pem_file;
-    private $url;
-    private $siren;
-    private $circuitId;
 
     /**
      * DocapostFast constructor.
@@ -23,18 +18,13 @@ class DocapostFast
      * @param array $parameters
      */
     public function __construct(
-        HttpClientInterface $client,
-        string $pem_file,
-        string $url,
-        string $siren,
-        string $circuitId,
+        private readonly HttpClientInterface $client,
+        private readonly string $pem_file,
+        private readonly string $url,
+        private readonly string $siren,
+        private readonly string $circuitId,
 
     ) {
-        $this->client = $client;
-        $this->pem_file = $pem_file;
-        $this->url = $url;
-        $this->siren = $siren;
-        $this->circuitId = $circuitId;
     }
 
     public function getSignInfo($documentiId)
@@ -135,14 +125,14 @@ class DocapostFast
         return json_decode($response->getContent(), true);
     }
 
-    public function dynamicCircuit(string $document, array $steps, array $OTPSteps, string $emailDestinataire = "", string $circuitId = "", string $comment = "")
+    public function dynamicCircuit(string $document, array $steps, array $OTPSteps, string $emailDestinataire = "", string $comment = "")
     {
         $circuit = [
             "type" => "BUREAUTIQUE_PDF",
             "steps" => $steps,
         ];
 
-        $docapostId = $this->uploadOnDemand($document, $circuit, strtolower($emailDestinataire), $circuitId, $comment);
+        $docapostId = $this->uploadOnDemand($document, $circuit, strtolower($emailDestinataire), $comment);
         if ((int) $docapostId === 0) {
             $json = json_decode($docapostId, true);
             throw new Exception("Erreur de l'envoi du fichier à docapost. " . $json['developerMessage'] . ". " . $json['userFriendlyMessage']);
@@ -155,14 +145,14 @@ class DocapostFast
         return $docapostId;
     }
 
-    public function uploadOnDemand(string $document, array $circuit, string $emailDestinataire = "", string $circuitId = "", string $comment = "")
+    public function uploadOnDemand(string $document, array $circuit, string $emailDestinataire = "", string $comment = "")
     {
         $jsonEncoder = new JsonEncoder();
 
         $formFields = [
             'email_destinataire' => $emailDestinataire,
             'doc' => DataPart::fromPath($document),
-            'circuit_id' => ($circuitId === '' || $circuitId === '0' ? $this->circuitId : $circuitId),
+            'circuit_id' =>  $this->circuitId,
             'circuit' => $jsonEncoder->encode($circuit, 'JSON'),
         ];
         if ($comment != "") {
@@ -190,7 +180,7 @@ class DocapostFast
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
-    public function uploadDocument(string $document, string $label, string $comment = "", string $emailDestinataire = "", string $circuitId = "")
+    public function uploadDocument(string $document, string $label, string $comment = "", string $emailDestinataire = "")
     {
         if (mime_content_type($document) != "application/pdf") {
             throw new \Exception("Format de fichier incorrect. Veuillez envoyer un PDF.");
@@ -204,7 +194,7 @@ class DocapostFast
         ];
         $formData = new FormDataPart($formFields);
 
-        $response = $this->sendQuery("POST", "documents/v2/" . $this->siren . "/" . ($circuitId === '' || $circuitId === '0' ? $this->circuitId : $circuitId) . "/upload", [
+        $response = $this->sendQuery("POST", "documents/v2/" . $this->siren . "/" .  $this->circuitId . "/upload", [
             'headers' => $formData->getPreparedHeaders()->toArray(),
             "body" => $formData->bodyToIterable()
         ]);
