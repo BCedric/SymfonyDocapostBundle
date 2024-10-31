@@ -22,10 +22,9 @@ class DocapostFast
         private readonly string $pem_file,
         private readonly string $url,
         private readonly string $siren,
-        private readonly string $circuitId,
+        private readonly ?string $circuitId,
 
-    ) {
-    }
+    ) {}
 
     public function getSignInfo($documentiId)
     {
