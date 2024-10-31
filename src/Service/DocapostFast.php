@@ -152,7 +152,6 @@ class DocapostFast
         $formFields = [
             'email_destinataire' => $emailDestinataire,
             'doc' => DataPart::fromPath($document),
-            'circuit_id' =>  $this->circuitId,
             'circuit' => $jsonEncoder->encode($circuit, 'JSON'),
         ];
         if ($comment != "") {
