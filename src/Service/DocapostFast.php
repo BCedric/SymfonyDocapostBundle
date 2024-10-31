@@ -178,7 +178,7 @@ class DocapostFast
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
-    public function uploadDocument(string $document, string $label, string $comment = "", string $emailDestinataire = "")
+    public function uploadDocument(string $document, string $label, string $comment = "", string $emailDestinataire = "", string $circuitId = null)
     {
         if (mime_content_type($document) != "application/pdf") {
             throw new \Exception("Format de fichier incorrect. Veuillez envoyer un PDF.");
@@ -192,7 +192,7 @@ class DocapostFast
         ];
         $formData = new FormDataPart($formFields);
 
-        $response = $this->sendQuery("POST", "documents/v2/" . $this->siren . "/" .  $this->circuitId . "/upload", [
+        $response = $this->sendQuery("POST", "documents/v2/" . $this->siren . "/" .  ($circuitId ?? $this->circuitId) . "/upload", [
             'headers' => $formData->getPreparedHeaders()->toArray(),
             "body" => $formData->bodyToIterable()
         ]);
