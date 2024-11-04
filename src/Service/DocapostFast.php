@@ -8,6 +8,7 @@ use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use ZipArchive;
 
 class DocapostFast
 {
@@ -23,6 +24,7 @@ class DocapostFast
         private readonly string $url,
         private readonly string $siren,
         private readonly ?string $circuitId,
+        private readonly ?string $archives_dir,
 
     ) {}
 
@@ -278,5 +280,36 @@ class DocapostFast
         ];
 
         return $this->sendQuery("PUT", "documents/v2/otp/$documentId/metadata/define", $parameters);
+    }
+
+    public function archive(string $documentId, string $filename, string $dir = null) {
+        $dir = $dir ?? $this->archives_dir;
+
+        if (!is_dir($dir)) {
+            mkdir($dir);
+        }
+
+        $document = $this->downloadDocument($documentId);
+        $json = json_decode($document, true);
+
+        if ($json == null) {
+            $documentPath = $dir . '/' . $filename . '_document.pdf';
+            file_put_contents($documentPath, $document);
+            $fdcPath = $dir . '/' . $filename . '_fdc.pdf';
+            $fdc = $this->getFdc($documentId);
+            file_put_contents($fdcPath, $fdc);
+            $zip = new ZipArchive();
+
+            if ($zip->open($dir . '/' . $filename . '.zip', ZipArchive::CREATE) !== TRUE) {
+                exit("Impossible d'ouvrir le fichier <$dir>\n");
+            }
+
+            $zip->addFile($documentPath, $filename . '_document.pdf');
+            $zip->addFile($fdcPath, $filename . '_fdc.pdf');
+            $zip->close();
+
+            unlink($documentPath);
+            unlink($fdcPath);
+        }
     }
 }

@@ -20,6 +20,7 @@ class BCedricDocapostBundle extends AbstractBundle
             ->scalarNode('url')->end()
             ->scalarNode('siren')->end()
             ->scalarNode('circuitId')->defaultNull()->end()
+            ->scalarNode('archives_dir')->defaultNull()->end()
             ->end();
     }
 
@@ -31,6 +32,7 @@ class BCedricDocapostBundle extends AbstractBundle
             ->setArgument('$pem_file', $config['pem_file'])
             ->setArgument('$url', $config['url'])
             ->setArgument('$siren', $config['siren'])
-            ->setArgument('$circuitId', $config['circuitId']);
+            ->setArgument('$circuitId', $config['circuitId'])
+            ->setArgument('$archives_dir', $config['archives_dir']);
     }
 }
