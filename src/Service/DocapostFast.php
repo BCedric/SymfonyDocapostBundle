@@ -185,7 +185,7 @@ class DocapostFast
         }
 
         $formFields = [
-            'label' => base64_encode($label),
+            'label' => $label,
             'comment' => $comment,
             'emailDestinataire' => $emailDestinataire,
             'content' => DataPart::fromPath($document),
