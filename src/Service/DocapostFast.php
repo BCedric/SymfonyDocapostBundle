@@ -82,7 +82,7 @@ class DocapostFast
     private function filterUsers(array $list): array
     {
         return array_filter($list, function ($u) {
-            return $u['prenom'] !== 'UCA' && $u['nom'] !== 'Test';
+            return $u['prenom'] !== 'e-signature';
         });
     }
 
