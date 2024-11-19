@@ -172,7 +172,7 @@ class DocapostFast
      * @param string $document
      * @param string $label
      * @param string $comment
-     * @param string $emailDestinataire
+     * @param string|array $emailDestinataire
      * @param string $circuitId
      * @return string
      * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
@@ -180,7 +180,7 @@ class DocapostFast
      * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
-    public function uploadDocument(string $document, string $label, string $comment = "", string $emailDestinataire = "", string $circuitId = null)
+    public function uploadDocument(string $document, string $label, string $comment = "", array|string $emailDestinataires = [], string $circuitId = null)
     {
         if (mime_content_type($document) != "application/pdf") {
             throw new \Exception("Format de fichier incorrect. Veuillez envoyer un PDF.");
@@ -189,7 +189,7 @@ class DocapostFast
         $formFields = [
             'label' => $label,
             'comment' => $comment,
-            'emailDestinataire' => $emailDestinataire,
+            'emailDestinataire' => gettype($emailDestinataires) === 'string' ? $emailDestinataires : implode(';', $emailDestinataires),
             'content' => DataPart::fromPath($document),
         ];
         $formData = new FormDataPart($formFields);
