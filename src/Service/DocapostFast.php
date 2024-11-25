@@ -322,7 +322,7 @@ class DocapostFast
             mkdir($dir);
         }
 
-        $documentPath = $dir . '/' . $filename . '.pdf';
+        $documentPath = $dir . '/' . $filename;
 
         $zip = new ZipArchive;
         $res = $zip->open($documentPath . '.zip');
