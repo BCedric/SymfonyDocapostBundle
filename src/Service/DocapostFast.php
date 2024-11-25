@@ -282,7 +282,8 @@ class DocapostFast
         return $this->sendQuery("PUT", "documents/v2/otp/$documentId/metadata/define", $parameters);
     }
 
-    public function archive(string $documentId, string $filename, string $dir = null) {
+    public function archive(string $documentId, string $filename, string $dir = null)
+    {
         $dir = $dir ?? $this->archives_dir;
 
         if (!is_dir($dir)) {
@@ -313,19 +314,20 @@ class DocapostFast
         }
     }
 
-    public function getArchivedDocumentData(string $filename, string $dir = null) {
+    public function getArchivedDocumentData(string $filename, string $dir = null)
+    {
         $dir = $dir ?? $this->archives_dir;
 
         if (!is_dir($dir)) {
             mkdir($dir);
         }
 
-        $documentPath = $dir . '/' . $filename . '_document.pdf';
+        $documentPath = $dir . '/' . $filename . '.pdf';
 
         $zip = new ZipArchive;
         $res = $zip->open($documentPath . '.zip');
         if ($res === TRUE) {
-            return  $zip->getFromName($filename. '_document.pdf');
+            return  $zip->getFromName($filename . '_document.pdf');
         }
         return null;
     }
