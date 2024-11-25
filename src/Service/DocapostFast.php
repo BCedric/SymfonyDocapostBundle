@@ -312,4 +312,21 @@ class DocapostFast
             unlink($fdcPath);
         }
     }
+
+    public function getArchivedDocumentData(string $filename, string $dir = null) {
+        $dir = $dir ?? $this->archives_dir;
+
+        if (!is_dir($dir)) {
+            mkdir($dir);
+        }
+
+        $documentPath = $dir . '/' . $filename . '_document.pdf';
+
+        $zip = new ZipArchive;
+        $res = $zip->open($documentPath . '.zip');
+        if ($res === TRUE) {
+            return  $zip->getFromName($filename. '_document.pdf');
+        }
+        return null;
+    }
 }
