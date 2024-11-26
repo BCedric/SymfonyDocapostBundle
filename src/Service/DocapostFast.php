@@ -331,4 +331,15 @@ class DocapostFast
         }
         return null;
     }
+
+    public function getArchiveData(string $filename, string $dir = null)
+    {
+        $dir = $dir ?? $this->archives_dir;
+
+        if (!is_dir($dir)) {
+            mkdir($dir);
+        }
+
+        return file_get_contents($dir . '/' . $filename);
+    }
 }
