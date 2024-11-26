@@ -340,6 +340,6 @@ class DocapostFast
             mkdir($dir);
         }
 
-        return file_get_contents($dir . '/' . $filename);
+        return file_get_contents($dir . '/' . $filename . ".zip");
     }
 }
