@@ -4,6 +4,7 @@ namespace BCedric\DocapostBundle;
 
 use BCedric\DocapostBundle\Service\DocapostFast;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
+use Symfony\Component\Console\Application;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
@@ -35,4 +36,7 @@ class BCedricDocapostBundle extends AbstractBundle
             ->setArgument('$circuitId', $config['circuitId'])
             ->setArgument('$archives_dir', $config['archives_dir']);
     }
+
+    /** @return void */
+    public function registerCommands(Application $application) {}
 }
