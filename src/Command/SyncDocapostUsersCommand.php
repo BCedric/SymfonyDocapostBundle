@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand('docapost:sync-users')]
-class SyncDocapostUsers extends Command
+class SyncDocapostUsersCommand extends Command
 {
     public function __construct(
         private readonly DocapostFast $docapostFast,
