@@ -1,10 +1,10 @@
 <?php
 
-namespace BCedric\Command;
+namespace BCedric\DocapostBundle\Command;
 
+use BCedric\DocapostBundle\Entity\DocapostUser;
+use BCedric\DocapostBundle\Repository\DocapostUserRepository;
 use BCedric\DocapostBundle\Service\DocapostFast;
-use BCedric\Entity\DocapostUser;
-use BCedric\Repository\DocapostUserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

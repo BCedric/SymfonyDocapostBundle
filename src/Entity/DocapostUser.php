@@ -1,8 +1,8 @@
 <?php
 
-namespace BCedric\Entity;
+namespace BCedric\DocapostBundle\Entity;
 
-use BCedric\Repository\DocapostUserRepository;
+use BCedric\DocapostBundle\Repository\DocapostUserRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DocapostUserRepository::class)]

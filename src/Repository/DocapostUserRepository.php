@@ -1,8 +1,8 @@
 <?php
 
-namespace BCedric\Repository;
+namespace BCedric\DocapostBundle\Repository;
 
-use BCedric\Entity\DocapostUser;
+use BCedric\DocapostBundle\Entity\DocapostUser;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
