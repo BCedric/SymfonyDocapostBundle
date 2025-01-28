@@ -11,7 +11,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand('docapost:sync-users')]
 class SyncDocapostUsersCommand extends Command
 {
     public function __construct(
@@ -21,6 +20,14 @@ class SyncDocapostUsersCommand extends Command
 
     ) {
         parent::__construct();
+    }
+
+    protected function configure()
+    {
+        $this
+            ->setName('docapost:sync-users')
+            ->setDescription('Synchronize Docapost users')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
