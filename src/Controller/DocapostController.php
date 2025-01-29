@@ -26,14 +26,14 @@ class DocapostController extends AbstractController
     #[Route(path: '/users', name: 'users', methods: 'GET')]
     public function getUsers(DocapostUserRepository $docapostUserRepository): Response
     {
-        $users = array_filter($docapostUserRepository->findAll(), fn($u) => !in_array($u->getEmail(), ['mathias.bernard@uca.fr', 'president@uca.fr']));
+        $users = array_values(array_filter($docapostUserRepository->findAll(), fn($u) => !in_array($u->getEmail(), ['mathias.bernard@uca.fr', 'president@uca.fr'])));
         return new JsonResponse($this->serializer->normalize($users));
     }
 
     #[Route(path: '/certif-users', name: 'users_certif', methods: 'GET')]
     public function getUsersCertificate(DocapostUserRepository $docapostUserRepository): Response
     {
-        $users = array_filter($docapostUserRepository->findAll(), fn($u) => in_array($u->getEmail(), ['president@uca.fr', 'nathalie.chantillon@uca.fr', 'sophie.fevre@uca.fr']));
+        $users = array_values(array_filter($docapostUserRepository->findAll(), fn($u) => in_array($u->getEmail(), ['president@uca.fr', 'nathalie.chantillon@uca.fr', 'sophie.fevre@uca.fr'])));
         return new JsonResponse($this->serializer->normalize($users));
     }
 
