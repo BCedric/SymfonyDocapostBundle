@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route(path: '/docapost')]
+#[Route(path: '/docapost', name: 'bcedric_docapost_')]
 class DocapostController extends AbstractController
 {
 
@@ -19,21 +19,21 @@ class DocapostController extends AbstractController
         $this->docapost = $docapost;
     }
 
-    #[Route(path: '/users', name: 'docapost_api_users', methods: 'GET')]
+    #[Route(path: '/users', name: 'users', methods: 'GET')]
     public function getUsers(DocapostUserRepository $docapostUserRepository): Response
     {
         $users = array_filter($docapostUserRepository->findAll(), fn($u) => !in_array($u->getEmail(), ['mathias.bernard@uca.fr', 'president@uca.fr']));
         return new JsonResponse($users);
     }
 
-    #[Route(path: '/certif-users', name: 'docapost_api_users_certif', methods: 'GET')]
+    #[Route(path: '/certif-users', name: 'users_certif', methods: 'GET')]
     public function getUsersCertificate(DocapostUserRepository $docapostUserRepository): Response
     {
         $users = array_filter($docapostUserRepository->findAll(), fn($u) => in_array($u->getEmail(), ['president@uca.fr', 'nathalie.chantillon@uca.fr', 'sophie.fevre@uca.fr']));
         return new JsonResponse($users);
     }
 
-    #[Route(path: '/download/{docapost_id}', name: 'docapost_api_download', methods: 'GET')]
+    #[Route(path: '/download/{docapost_id}', name: 'download', methods: 'GET')]
     public function download(string $docapost_id)
     {
         $response = $this->docapost->downloadDocument($docapost_id);
@@ -44,7 +44,7 @@ class DocapostController extends AbstractController
         );
     }
 
-    #[Route(path: '/infos/{docapost_id}', name: 'docapost_api_infos', methods: 'GET')]
+    #[Route(path: '/infos/{docapost_id}', name: 'infos', methods: 'GET')]
     public function getInfos(string $docapost_id): Response
     {
         $infos = [
