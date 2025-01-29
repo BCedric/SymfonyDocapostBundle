@@ -30,19 +30,6 @@ class BCedricDocapostBundle extends AbstractBundle
 
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
-        $builder->register(SyncDocapostUsersCommand::class)
-            ->setClass(SyncDocapostUsersCommand::class)
-            ->addTag('console.command')
-            ->addArgument(new Reference(DocapostFast::class))
-            ->addArgument(new Reference(DocapostUserRepository::class))
-            ->addArgument(new Reference(EntityManagerInterface::class))
-        ;
-
-        $builder->register(DocapostUserRepository::class)
-            ->setClass(DocapostUserRepository::class)
-            ->addArgument(new Reference(ManagerRegistry::class))
-        ;
-
         $container->services()->set(DocapostFast::class)
             ->public();
 
