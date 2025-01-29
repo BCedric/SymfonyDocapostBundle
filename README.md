@@ -27,3 +27,25 @@ Bundle de connexion d'une application symfony vers le parapheur Docapost Fast
         circuitId: "circuit"
 
 ```
+
+- Utilisation des entitées du package (DocapostUser) : Ajouter dans le fichier `config/packages/doctrine.yaml`: 
+```
+doctrine:
+    #...
+    orm:
+        #...
+        mappings:
+            #...
+            BCedricDocapostBundle:
+                is_bundle: true
+                type: attribute
+                alias: DocapostBundle
+```
+
+- Utilisation de l'API : Dans le fichier `config/routes/annotations.yaml`, ajouter : 
+```
+    bcedric_docapost:
+        resource: "../../vendor/bcedric/docapost/src/Controller/DocapostController.php"
+        type: attribute
+        prefix: /mon_prefix
+```
