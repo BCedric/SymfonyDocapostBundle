@@ -1,0 +1,19 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  BCedric\DocapostBundle\:
+    resource: "../src/*"
+    exclude: "../src/{Entity,Migrations,Tests,Kernel.php}"
+
+  BCedric\DocapostBundle\Controller\DocapostAPIController:
+      public: true
+      autowire: true
+      autoconfigure: true
+      calls:
+        - [setContainer, ['@Psr\Container\ContainerInterface']]
+      tags:
+        - "controller.service_arguments"
+        - "container.service_subscriber"
