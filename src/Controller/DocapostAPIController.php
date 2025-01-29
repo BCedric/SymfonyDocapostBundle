@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\api;
+namespace BCedric\DocapostBundle\Controller;
 
 use BCedric\DocapostBundle\Repository\DocapostUserRepository;
 use BCedric\DocapostBundle\Service\DocapostFast;
@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/docapost')]
-class DocapostAPIController extends AbstractController
+class DocapostController extends AbstractController
 {
 
     private $docapost;
@@ -25,7 +25,7 @@ class DocapostAPIController extends AbstractController
         $users = array_filter($docapostUserRepository->findAll(), fn($u) => !in_array($u->getEmail(), ['mathias.bernard@uca.fr', 'president@uca.fr']));
         return new JsonResponse($users);
     }
-    
+
     #[Route(path: '/certif-users', name: 'docapost_api_users_certif', methods: 'GET')]
     public function getUsersCertificate(DocapostUserRepository $docapostUserRepository): Response
     {
