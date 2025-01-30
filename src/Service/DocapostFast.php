@@ -226,7 +226,7 @@ class DocapostFast
     {
         if (isset($_ENV['PROXY_URL'])) {
             $parameters['proxy'] = $_ENV['PROXY_URL'];
-            $parameters['timeout'] = 60;
+            $parameters['timeout'] = 120;
         }
 
         $docapost_params =  [
