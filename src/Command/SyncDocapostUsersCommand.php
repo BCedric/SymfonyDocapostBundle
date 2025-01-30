@@ -39,6 +39,15 @@ class SyncDocapostUsersCommand extends Command
 
             $this->em->persist($docapostUser);
         }
+        $docapostUsers = $this->docapostUserRepository->findAll();
+        foreach ($docapostUsers as $docapostUser) {
+            $res = array_filter($users, fn($u) => $u['email'] === $docapostUser->getEmail());
+            if (empty($res)) {
+                $output->writeln("Delete " . $docapostUser->getNom() . " " . $docapostUser->getPrenom());
+                $this->em->remove($docapostUser);
+            }
+        }
+
         $this->em->flush();
         $output->writeln("=================");
 
