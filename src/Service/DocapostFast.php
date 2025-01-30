@@ -25,6 +25,7 @@ class DocapostFast
         private readonly string $siren,
         private readonly ?string $circuitId,
         private readonly ?string $archives_dir,
+        private readonly ?string $proxy_url,
 
     ) {}
 
@@ -224,9 +225,8 @@ class DocapostFast
      */
     private function sendQuery(string $method, string $uri, array $parameters = [])
     {
-        if (isset($_ENV['PROXY_URL'])) {
-            $parameters['proxy'] = $_ENV['PROXY_URL'];
-            $parameters['timeout'] = 120;
+        if ($this->proxy_url != null && $this->proxy_url != '') {
+            $parameters['proxy'] = $this->proxy_url;
         }
 
         $docapost_params =  [

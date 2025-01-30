@@ -17,11 +17,6 @@ Bundle de connexion d'une application symfony vers le parapheur Docapost Fast
 
 ```
 
-- Si les appels HTTP doivent passer par un proxy, renseigner la variable d'environnement : 
-```
-    PROXY_URL="http://mon.proxy"
-```
-
 - créer le fichier `config/packages/b_cedric_docapost.yaml` avec le contenu suivant :
 
 ```
@@ -30,6 +25,8 @@ Bundle de connexion d'une application symfony vers le parapheur Docapost Fast
         url: "https://parapheur.url.fr/parapheur-ws/rest/v1/documents/"
         siren: "siren"
         circuitId: "circuit"
+        archives_dir: mon/repertoire/archives
+        proxy_url: "http://mon.proxy"
 
 ```
 

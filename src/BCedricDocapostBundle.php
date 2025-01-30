@@ -20,6 +20,7 @@ class BCedricDocapostBundle extends AbstractBundle
             ->scalarNode('siren')->end()
             ->scalarNode('circuitId')->defaultNull()->end()
             ->scalarNode('archives_dir')->defaultNull()->end()
+            ->scalarNode('proxy_url')->defaultNull()->end()
             ->end();
     }
 
@@ -35,6 +36,7 @@ class BCedricDocapostBundle extends AbstractBundle
             ->setArgument('$url', $config['url'])
             ->setArgument('$siren', $config['siren'])
             ->setArgument('$circuitId', $config['circuitId'])
-            ->setArgument('$archives_dir', $config['archives_dir']);
+            ->setArgument('$archives_dir', $config['archives_dir'])
+            ->setArgument('$proxy_url', $config['proxy_url']);
     }
 }
