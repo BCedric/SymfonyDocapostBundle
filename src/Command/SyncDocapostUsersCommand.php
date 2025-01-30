@@ -26,16 +26,12 @@ class SyncDocapostUsersCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $users = $this->docapostFast->getUsers();
-        $output->writeln("======".date('d/m/Y')."=========");
+        $output->writeln("======" . date('d/m/Y') . "=========");
         foreach ($users as $user) {
             $docapostUser = $this->docapostUserRepository->findOneByEmail($user['email']);
             if ($docapostUser == null) {
                 $docapostUser = new DocapostUser();
-                $output->writeln("Add ". $user['nom']." ". $user['prenom'] );
-                
-            } else {
-
-                $output->writeln("Update ". $user['nom']." ". $user['prenom'] );
+                $output->writeln("Add " . $user['nom'] . " " . $user['prenom']);
             }
             $docapostUser->setNom($user['nom']);
             $docapostUser->setPrenom($user['prenom']);
