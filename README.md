@@ -17,6 +17,11 @@ Bundle de connexion d'une application symfony vers le parapheur Docapost Fast
 
 ```
 
+- Si les appels HTTP doivent passer par un proxy, renseigner la variable d'environnement : 
+```
+    PROXY_URL="http://mon.proxy"
+```
+
 - créer le fichier `config/packages/b_cedric_docapost.yaml` avec le contenu suivant :
 
 ```
@@ -28,10 +33,6 @@ Bundle de connexion d'une application symfony vers le parapheur Docapost Fast
 
 ```
 
-- Si les appels HTTP doivent passer par un proxy, renseigner la variable d'environnement : 
-```
-    PROXY_URL="http://mon.proxy"
-```
 
 - Utilisation des entitées du package (DocapostUser) : Ajouter dans le fichier `config/packages/doctrine.yaml`: 
 ```
