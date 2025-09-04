@@ -139,11 +139,6 @@ class DocapostFast
         } else {
             $emailDestinataire = array_map(fn($e) => trim($e), $emailDestinataire);
         }
-        $OTPSteps = array_map(function ($s) {
-            $s['email'] = trim($s['email']);
-            return $s;
-        }, $OTPSteps);
-
 
         $docapostId = $this->uploadOnDemand($document, $circuit, strtolower($emailDestinataire), $comment);
         if ((int) $docapostId === 0) {
@@ -263,6 +258,12 @@ class DocapostFast
     {
         $xmlData = [];
         $i = 0;
+
+        $otpInfos = array_map(function ($s) {
+            $s['email'] = trim($s['email']);
+            return $s;
+        }, $otpInfos);
+
         foreach ($otpInfos as $info) {
             $xmlOTP = [];
             foreach ($info as $key => $val) {
