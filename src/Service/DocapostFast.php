@@ -127,12 +127,21 @@ class DocapostFast
         return json_decode($response->getContent(), true);
     }
 
-    public function dynamicCircuit(string $document, array $steps, array $OTPSteps, string $emailDestinataire = "", string $comment = "")
+    public function dynamicCircuit(string $document, array $steps, array $OTPSteps, string|array $emailDestinataire = "", string $comment = "")
     {
         $circuit = [
             "type" => "BUREAUTIQUE_PDF",
             "steps" => $steps,
         ];
+
+        if (gettype($emailDestinataire) === 'string') {
+            $emailDestinataire = trim($emailDestinataire);
+        } else {
+            $emailDestinataire = array_map(fn($e) => trim($e), $emailDestinataire);
+        }
+        foreach ($OTPSteps as $step) {
+            $step['email'] = trim($step['email']);
+        }
 
         $docapostId = $this->uploadOnDemand($document, $circuit, strtolower($emailDestinataire), $comment);
         if ((int) $docapostId === 0) {
