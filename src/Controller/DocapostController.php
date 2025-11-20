@@ -67,7 +67,6 @@ class DocapostController extends AbstractController
         string $docapost_id,
         #[MapQueryParameter] string $filename = ''
     ) {
-        $pdf = new \Jurosh\PDFMerge\PDFMerger;
         if ($filename === '') {
             return throw new Exception('You must set filename query parameter', 500);
         }
@@ -84,9 +83,9 @@ class DocapostController extends AbstractController
         file_put_contents($docPath, $documentContent);
         $fdcContent = $this->docapost->getFdc($docapost_id);
         file_put_contents($fdcPath, $fdcContent);
-        $pdf->addPDF($docPath);
-        $pdf->addPDF($fdcPath);
-        $pdf->merge('file', $resPath);
+        
+        $cmd = "gs -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=$resPath $docPath $fdcPath";
+        exec($cmd, $output, $resultcode);
 
         $response = file_get_contents($resPath);
         unlink($fdcPath);
