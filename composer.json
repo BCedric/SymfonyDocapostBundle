@@ -19,6 +19,7 @@
     "symfony/config": ">=6.0",
     "symfony/dependency-injection": ">=6.0",
     "symfony/http-kernel": ">=6.0",
-    "symfony/orm-pack": "^2.4"
+    "symfony/orm-pack": "^2.4",
+    "jurosh/pdf-merge": "^2.1"
   }
 }
