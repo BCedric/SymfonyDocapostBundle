@@ -51,7 +51,7 @@ class DocapostController extends AbstractController
         );
     }
 
-    #[Route(path: '/getFdc/{accessCode}', name: 'docapost_getFdc')]
+    #[Route(path: '/getFdc/{docapost_id}', name: 'docapost_getFdc')]
     public function getFdc(string $docapost_id)
     {
         $response = $this->docapost->getFdc($docapost_id);
