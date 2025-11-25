@@ -30,8 +30,8 @@ Bundle de connexion d'une application symfony vers le parapheur Docapost Fast
 
 ```
 
+- Utilisation des entitées du package (DocapostUser) : Ajouter dans le fichier `config/packages/doctrine.yaml`:
 
-- Utilisation des entitées du package (DocapostUser) : Ajouter dans le fichier `config/packages/doctrine.yaml`: 
 ```
 doctrine:
     #...
@@ -45,10 +45,23 @@ doctrine:
                 alias: DocapostBundle
 ```
 
-- Utilisation de l'API : Dans le fichier `config/routes/annotations.yaml`, ajouter : 
+- Utilisation de l'API : Dans le fichier `config/routes/annotations.yaml`, ajouter :
+
 ```
     bcedric_docapost:
         resource: "../../vendor/bcedric/docapost/src/Controller/DocapostController.php"
         type: attribute
         prefix: /mon_prefix
 ```
+
+### API
+
+| URL                                   | Description                                                                                                                                 | Méthode |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| /docapost/users                       | Retourne la liste des utilisateurs inscrits sur Docapost                                                                                    | GET     |
+| /docapost/certif-users                | Retourne la liste des utilisateurs qui possède une certification RGS\*\*                                                                    | GET     |
+| /download/{docapost_id}               | Renvoie le document dans son état actuel                                                                                                    | GET     |
+| /getFdc/{docapost_id}                 | Renvoie la fiche de circualtion du document                                                                                                 | GET     |
+| /downloadDocumentAndFDC/{docapost_id} | Renvoie la fusion de la fiche de circualtion et du document (Cette fonction utilise le package ghostscrit)                                  | GET     |
+| /downloadProofFile/{docapost_id}      | Renvoie le dossier de preuve                                                                                                                | GET     |
+| /infos/{docapost_id}                  | Retourne un tableau d'informations concernant la signature du document (message de refus, URL de la prochaine signature OTP, historique...) | GET     |

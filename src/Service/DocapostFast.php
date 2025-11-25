@@ -105,6 +105,10 @@ class DocapostFast
 
     public function getFdc(string $documentId)
     {
+        $response = $this->getArchivedFDCData($documentId);
+        if ($response != null) {
+            return $response;
+        }
         $response = $this->sendQuery("GET", "documents/v2/$documentId/getFdc");
         return $response->getContent();
     }
@@ -218,9 +222,21 @@ class DocapostFast
      */
     public function downloadDocument($id)
     {
+        $response = $this->getArchivedDocumentData($id);
+        if ($response != null) {
+            return $response;
+        }
         $response = $this->sendQuery("GET", "documents/v2/$id/download");
+        $content = $response->getContent();
+
+        if (str_contains($content, "Invalid docId")) {
+            $error = json_decode($content, true);
+            throw new Exception($error['userFriendlyMessage'], 404);
+        }
+
         return $response->getContent();
     }
+
 
     /**
      * @param string $method
@@ -295,7 +311,7 @@ class DocapostFast
         return $this->sendQuery("PUT", "documents/v2/otp/$documentId/metadata/define", $parameters);
     }
 
-    public function archive(string $documentId, string $filename, string $dir = null)
+    public function archive(string $documentId, string $dir = null)
     {
         $dir = $dir ?? $this->archives_dir;
 
@@ -307,19 +323,19 @@ class DocapostFast
         $json = json_decode($document, true);
 
         if ($json == null) {
-            $documentPath = $dir . '/' . $filename . '_document.pdf';
+            $documentPath = $dir . '/' . $documentId . '_document.pdf';
             file_put_contents($documentPath, $document);
-            $fdcPath = $dir . '/' . $filename . '_fdc.pdf';
+            $fdcPath = $dir . '/' . $documentId . '_fdc.pdf';
             $fdc = $this->getFdc($documentId);
             file_put_contents($fdcPath, $fdc);
             $zip = new ZipArchive();
 
-            if ($zip->open($dir . '/' . $filename . '.zip', ZipArchive::CREATE) !== TRUE) {
+            if ($zip->open($dir . '/' . $documentId . '.zip', ZipArchive::CREATE) !== TRUE) {
                 exit("Impossible d'ouvrir le fichier <$dir>\n");
             }
 
-            $zip->addFile($documentPath, $filename . '_document.pdf');
-            $zip->addFile($fdcPath, $filename . '_fdc.pdf');
+            $zip->addFile($documentPath, $documentId . '_document.pdf');
+            $zip->addFile($fdcPath, $documentId . '_fdc.pdf');
             $zip->close();
 
             unlink($documentPath);
@@ -341,6 +357,23 @@ class DocapostFast
         $res = $zip->open($documentPath . '.zip');
         if ($res === TRUE) {
             return  $zip->getFromName($filename . '_document.pdf');
+        }
+        return null;
+    }
+    public function getArchivedFDCData(string $filename, string $dir = null)
+    {
+        $dir = $dir ?? $this->archives_dir;
+
+        if (!is_dir($dir)) {
+            mkdir($dir);
+        }
+
+        $documentPath = $dir . '/' . $filename;
+
+        $zip = new ZipArchive;
+        $res = $zip->open($documentPath . '.zip');
+        if ($res === TRUE) {
+            return  $zip->getFromName($filename . '_fdc.pdf');
         }
         return null;
     }

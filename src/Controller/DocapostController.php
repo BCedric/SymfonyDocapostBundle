@@ -41,25 +41,33 @@ class DocapostController extends AbstractController
     }
 
     #[Route(path: '/download/{docapost_id}', name: 'download', methods: 'GET')]
-    public function download(string $docapost_id)
+    public function download(string $docapost_id, #[MapQueryParameter] string $filename = '')
     {
         $response = $this->docapost->downloadDocument($docapost_id);
         return new Response(
             $response,
             200,
-            array('Content-Type' => 'application/pdf')
+            [
+                'Content-Type' => 'application/pdf',
+                'attachment; filename="' . ($filename != '' ? $filename : $docapost_id) . '.pdf' . '"'
+
+            ]
         );
     }
 
     #[Route(path: '/getFdc/{docapost_id}', name: 'docapost_getFdc')]
-    public function getFdc(string $docapost_id)
+    public function getFdc(string $docapost_id, #[MapQueryParameter] string $filename = '')
     {
         $response = $this->docapost->getFdc($docapost_id);
 
         return new Response(
             $response,
             200,
-            array('Content-Type' => 'application/pdf')
+            [
+                'Content-Type' => 'application/pdf',
+                'attachment; filename="' . ($filename != '' ? $filename : $docapost_id) . '_fdc .pdf' . '"'
+
+            ]
         );
     }
     #[Route(path: '/downloadDocumentAndFDC/{docapost_id}', name: 'docapost_downloadDocument_FDC')]
@@ -67,23 +75,17 @@ class DocapostController extends AbstractController
         string $docapost_id,
         #[MapQueryParameter] string $filename = ''
     ) {
-        if ($filename === '') {
-            return throw new Exception('You must set filename query parameter', 500);
-        }
-        $documentContent = $this->docapost->getArchivedDocumentData($filename);
-        if ($documentContent == null) {
-            $documentContent = $this->docapost->downloadDocument($docapost_id);
-        }
+        $documentContent = $this->docapost->downloadDocument($docapost_id);
         if ($documentContent == null) {
             return throw new Exception("File note found", 404);
         }
+        $fdcContent = $this->docapost->getFdc($docapost_id);
         $docPath = '/tmp/doc' . $docapost_id;
         $fdcPath = '/tmp/fdc' . $docapost_id;
         $resPath = '/tmp/res' . $docapost_id;
         file_put_contents($docPath, $documentContent);
-        $fdcContent = $this->docapost->getFdc($docapost_id);
         file_put_contents($fdcPath, $fdcContent);
-        
+
         $cmd = "gs -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=$resPath $docPath $fdcPath";
         exec($cmd, $output, $resultcode);
 
@@ -94,7 +96,11 @@ class DocapostController extends AbstractController
         return new Response(
             $response,
             200,
-            ['Content-Type' => 'application/pdf', 'attachment; filename="' . $filename  . '"']
+            [
+                'Content-Type' => 'application/pdf',
+                'attachment; filename="' . ($filename != '' ? $filename : $docapost_id) . '.pdf' . '"'
+
+            ]
         );
     }
 
@@ -103,11 +109,8 @@ class DocapostController extends AbstractController
         string $docapost_id,
         #[MapQueryParameter] string $filename = ''
     ) {
-        if ($filename === '') {
-            return throw new Exception('You must set filename query parameter', 500);
-        }
         try {
-            $zipContent = $this->docapost->getArchiveData($filename);
+            $zipContent = $this->docapost->getArchiveData($docapost_id);
         } catch (\Throwable $th) {
             $zip = new ZipArchive();
             $docPath = '/tmp/doc' . $docapost_id;
@@ -140,7 +143,7 @@ class DocapostController extends AbstractController
             [
                 'Content-Type' => 'application/x-zip',
                 'Content-Disposition' =>
-                'attachment; filename="' . $filename  . '"'
+                'attachment; filename="' . ($filename != '' ? $filename : $docapost_id) . '.zip' . '"'
             ]
         );
     }
