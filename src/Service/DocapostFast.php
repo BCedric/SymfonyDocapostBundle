@@ -229,9 +229,10 @@ class DocapostFast
         $response = $this->sendQuery("GET", "documents/v2/$id/download");
         $content = $response->getContent();
 
-        if (str_contains($content, "Invalid docId")) {
-            $error = json_decode($content, true);
-            throw new Exception($error['userFriendlyMessage'], 404);
+        $error = json_decode($content, true);
+
+        if ($error != false) {
+            throw new Exception($error['developerMessage'] . " " . $error['userFriendlyMessage'], 500);
         }
 
         return $response->getContent();

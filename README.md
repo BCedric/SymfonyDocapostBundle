@@ -45,15 +45,6 @@ doctrine:
                 alias: DocapostBundle
 ```
 
-- Utilisation de l'API : Dans le fichier `config/routes/annotations.yaml`, ajouter :
-
-```
-    bcedric_docapost:
-        resource: "../../vendor/bcedric/docapost/src/Controller/DocapostController.php"
-        type: attribute
-        prefix: /mon_prefix
-```
-
 ### Service DocapostFast
 
 | Fonction                                                                                      | Description                                                                               |
@@ -73,6 +64,15 @@ doctrine:
 | archive($documentId, $dir = null)                                                             | Archive un document dans le dossier définit dans les paramètres                           |
 
 ### API
+
+Utilisation de l'API : Dans le fichier `config/routes/annotations.yaml`, ajouter :
+
+```
+    bcedric_docapost:
+        resource: "../../vendor/bcedric/docapost/src/Controller/DocapostController.php"
+        type: attribute
+        prefix: /mon_prefix
+```
 
 | URL                                   | Description                                                                                                                                 | Méthode | Paramètres |
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ---------- |
