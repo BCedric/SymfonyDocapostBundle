@@ -127,8 +127,8 @@ class DocapostController extends AbstractController
                 exit("Impossible d'ouvrir le fichier <$zipPath>\n");
             }
 
-            $zip->addFile($docPath, 'document.pdf');
-            $zip->addFile($fdcPath, 'fdc.pdf');
+            $zip->addFile($docPath, ($filename != '' ? $filename : $docapost_id) . '_document.pdf');
+            $zip->addFile($fdcPath, ($filename != '' ? $filename : $docapost_id) . 'fdc.pdf');
             $zip->close();
 
             $zipContent = file_get_contents($zipPath);
