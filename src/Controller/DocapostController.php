@@ -109,33 +109,30 @@ class DocapostController extends AbstractController
         string $docapost_id,
         #[MapQueryParameter] string $filename = ''
     ) {
-        try {
-            $zipContent = $this->docapost->getArchiveData($docapost_id);
-        } catch (\Throwable $th) {
-            $zip = new ZipArchive();
-            $docPath = '/tmp/doc' . $docapost_id;
-            $fdcPath = '/tmp/fdc' . $docapost_id;
-            $zipPath = '/tmp/zip' . $docapost_id . '.zip';
+        $zip = new ZipArchive();
+        $docPath = '/tmp/doc' . $docapost_id;
+        $fdcPath = '/tmp/fdc' . $docapost_id;
+        $zipPath = '/tmp/zip' . $docapost_id . '.zip';
 
-            $documentContent = $this->docapost->downloadDocument($docapost_id);
-            file_put_contents($docPath, $documentContent);
+        $documentContent = $this->docapost->downloadDocument($docapost_id);
+        file_put_contents($docPath, $documentContent);
 
-            $fdcContent = $this->docapost->getFdc($docapost_id);
-            file_put_contents($fdcPath, $fdcContent);
+        $fdcContent = $this->docapost->getFdc($docapost_id);
+        file_put_contents($fdcPath, $fdcContent);
 
-            if ($zip->open($zipPath, ZipArchive::CREATE) !== TRUE) {
-                exit("Impossible d'ouvrir le fichier <$zipPath>\n");
-            }
-
-            $zip->addFile($docPath, ($filename != '' ? $filename : $docapost_id) . '_document.pdf');
-            $zip->addFile($fdcPath, ($filename != '' ? $filename : $docapost_id) . 'fdc.pdf');
-            $zip->close();
-
-            $zipContent = file_get_contents($zipPath);
-            unlink($docPath);
-            unlink($fdcPath);
-            unlink($zipPath);
+        if ($zip->open($zipPath, ZipArchive::CREATE) !== TRUE) {
+            exit("Impossible d'ouvrir le fichier <$zipPath>\n");
         }
+
+
+        $zip->addFile($docPath, ($filename != '' ? $filename : $docapost_id) . '_document.pdf');
+        $zip->addFile($fdcPath, ($filename != '' ? $filename : $docapost_id) . '_fdc.pdf');
+        $zip->close();
+
+        $zipContent = file_get_contents($zipPath);
+        unlink($docPath);
+        unlink($fdcPath);
+        unlink($zipPath);
 
         return new Response(
             $zipContent,
