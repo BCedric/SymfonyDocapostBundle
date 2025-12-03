@@ -63,6 +63,39 @@ doctrine:
 | downloadDocument($id)                                                                         | Permet de récupérer le contenu d'un document                                              |
 | archive($documentId, $dir = null)                                                             | Archive un document dans le dossier définit dans les paramètres                           |
 
+#### Utilisation de la fonction dynamicCircuit
+
+La fonction dynamicCircuit permet d'envoyer un document dans un circuit dynamique, avec en paramètre :
+    - $document : le chemin vers le fichier à envoyer
+    - $steps : les étapes du circuit de signature, sous la forme suivante :
+```
+    [
+        ["step" => "signature", "members" => ["email1@test.fr", "email2@test.fr]],
+        ["step" => "visa", "members" => ["email1@test.fr", "email2@test.fr]],
+        ["step" => "OTPSignature"]
+
+    ]
+```
+
+
+    - $otpSteps : Le paramètrave des étapes OTP :
+
+```
+    [
+        [
+            "email" => "email@test.fr"
+            "firstname" => "Prénom"
+            "lastname" => "Nom"
+        ],
+        [
+            "email" => "email2@test.fr"
+            "firstname" => "Prénom2"
+            "lastname" => "Nom2"
+        ],
+    ]
+```
+    - emailDestinataire: la liste des emails qui recevront le document signé sous la forme d'un tableau ou d'une chaine de caractères (les mails doivent être séparés par un ";")
+
 ### API
 
 Utilisation de l'API : Dans le fichier `config/routes/annotations.yaml`, ajouter :

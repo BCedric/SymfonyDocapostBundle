@@ -141,7 +141,7 @@ class DocapostFast
         if (gettype($emailDestinataire) === 'string') {
             $emailDestinataire = trim($emailDestinataire);
         } else {
-            $emailDestinataire = array_map(fn($e) => trim($e), $emailDestinataire);
+            $emailDestinataire = implode(';', array_map(fn($e) => trim($e), $emailDestinataire));
         }
 
         $docapostId = $this->uploadOnDemand($document, $circuit, strtolower($emailDestinataire), $comment);
