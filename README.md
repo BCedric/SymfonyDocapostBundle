@@ -66,8 +66,8 @@ doctrine:
 #### Utilisation de la fonction dynamicCircuit
 
 La fonction dynamicCircuit permet d'envoyer un document dans un circuit dynamique, avec en paramètre :
-    - $document : le chemin vers le fichier à envoyer
-    - $steps : les étapes du circuit de signature, sous la forme suivante :
+- $document : le chemin vers le fichier à envoyer
+- $steps : les étapes du circuit de signature, sous la forme suivante :
 ```
     [
         ["step" => "signature", "members" => ["email1@test.fr", "email2@test.fr]],
@@ -78,7 +78,7 @@ La fonction dynamicCircuit permet d'envoyer un document dans un circuit dynamiqu
 ```
 
 
-    - $otpSteps : Le paramètrave des étapes OTP :
+- $otpSteps : Le paramètrave des étapes OTP :
 
 ```
     [
@@ -94,7 +94,15 @@ La fonction dynamicCircuit permet d'envoyer un document dans un circuit dynamiqu
         ],
     ]
 ```
-    - emailDestinataire: la liste des emails qui recevront le document signé sous la forme d'un tableau ou d'une chaine de caractères (les mails doivent être séparés par un ";")
+- emailDestinataire: la liste des emails qui recevront le document signé sous la forme d'un tableau ou d'une chaine de caractères (les mails doivent être séparés par un ";")
+
+#### Utilisation de la fonction uploadDocument
+La fonction dynamicCircuit permet d'envoyer un document dans un circuit statique, avec en paramètre :
+- $document : le chemin vers le fichier à envoyer
+- $label : Un label permettant de classer le document
+- $comment : un commentaire (par défaut '')
+- $emailDestinataires : la liste des emails qui recevront le document signé sous la forme d'un tableau ou d'une chaine de caractères (les mails doivent être séparés par un ";")
+- $circuitId : l'id du circuit à utiliser. Si non renseigné, l'id utilisé est celui renseigné dans la configuration du package.
 
 ### API
 
