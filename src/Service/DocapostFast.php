@@ -2,6 +2,7 @@
 
 namespace BCedric\DocapostBundle\Service;
 
+use BCedric\DocapostBundle\Repository\DocapostUserRepository;
 use Exception;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
@@ -26,6 +27,7 @@ class DocapostFast
         private readonly ?string $circuitId,
         private readonly ?string $archives_dir,
         private readonly ?string $proxy_url,
+        private readonly DocapostUserRepository $docapostUserRepository
 
     ) {}
 
@@ -52,32 +54,37 @@ class DocapostFast
 
     public function getUsers(): array
     {
-        $res = json_decode($this->exportUsersData(), true);
-        $res = array_map(function ($u) {
-            unset($u['circuits']);
-            return $u;
-        }, $res['users']);
-        return array_values($this->filterUsers($res));
+        try {
+            $users = array_values($this->docapostUserRepository->findByHasCertif(false));
+            return $users;
+        } catch (\Throwable $th) {
+            $res = json_decode($this->exportUsersData(), true);
+            $users = $res['users'];
+            $withoutCertificat = array_filter(
+                $users,
+                fn($u) =>
+                $u['authenticationType'] !== "CERTIFICAT"
+            );
+            return array_values($this->filterUsers($withoutCertificat));
+        }
     }
 
     public function getUsersCertificate(): array
     {
-        $res = json_decode($this->exportUsersData(), true);
-        $users = $res['users'];
-        $certificat = array_filter($users, function ($u) {
-            if (array_key_exists('circuits', $u)) {
-                $circuit = current($u['circuits']);
-                $habilitation = current($circuit['habilitations']);
-                return $habilitation['profil'] === 'CERTIFICAT';
-            } else {
-                return false;
-            }
-        });
-        $certificat = array_map(function ($u) {
-            unset($u['circuits']);
-            return $u;
-        }, $certificat);
-        return array_values($this->filterUsers($certificat));
+        try {
+            $users = array_values($this->docapostUserRepository->findByHasCertif(true));
+            return $users;
+        } catch (\Throwable $th) {
+            $res = json_decode($this->exportUsersData(), true);
+            $users = $res['users'];
+            $certificat = array_filter(
+                $users,
+                fn($u) =>
+                $u['authenticationType'] === "CERTIFICAT" && $u['nom'] != "e-signature"
+            );
+
+            return array_values($this->filterUsers($certificat));
+        }
     }
 
     private function filterUsers(array $list): array

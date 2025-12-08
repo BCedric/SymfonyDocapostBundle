@@ -25,7 +25,7 @@ class SyncDocapostUsersCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $users = $this->docapostFast->getUsers();
+        $users = array_merge($this->docapostFast->getUsers(), $this->docapostFast->getUsersCertificate());
         $output->writeln("======" . date('d/m/Y') . "=========");
         foreach ($users as $user) {
             $docapostUser = $this->docapostUserRepository->findOneByEmail($user['email']);
@@ -36,6 +36,7 @@ class SyncDocapostUsersCommand extends Command
             $docapostUser->setNom($user['nom']);
             $docapostUser->setPrenom($user['prenom']);
             $docapostUser->setEmail($user['email']);
+            $docapostUser->setHasCertif($user['authenticationType'] === "CERTIFICAT");
 
             $this->em->persist($docapostUser);
         }

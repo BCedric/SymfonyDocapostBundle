@@ -22,6 +22,9 @@ class DocapostUser
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
+    #[ORM\Column(type: 'boolean', options: ["default" => false])]
+    private bool $hasCertif = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +62,18 @@ class DocapostUser
     public function setEmail(string $email): static
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getHasCertif(): ?string
+    {
+        return $this->hasCertif;
+    }
+
+    public function setHasCertif(string $hasCertif): static
+    {
+        $this->hasCertif = $hasCertif;
 
         return $this;
     }
