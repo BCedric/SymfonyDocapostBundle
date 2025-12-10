@@ -47,27 +47,30 @@ doctrine:
 
 ### Service DocapostFast
 
-| Fonction                                                                                      | Description                                                                               |
-| --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| getSignInfo($documentiId)                                                                     | Retourne les infos sur la signature d'un document (message de rejet, nb de signatures...) |
-| exportUsersData()                                                                             | Retourne tous les utilisateurs inscrits sur Docapost (données brutes de Docapost)         |
-| getUsers():                                                                                   | Retourne les utilisateurs inscrits sur Docapost                                           |
-| getUsersCertificate():                                                                        | Retourne les utilisateurs ayant un certificat RGS\*\*                                     |
-| delete($documentId)                                                                           | Fonction permettant de supprimer un document                                              |
-| getRefusalMessage($documentId)                                                                | Fonction qui renvoie le message de refus d'un document                                    |
-| getFdc($documentId)                                                                           | Fonction qui retourne le contenu de la fiche de circulation                               |
-| getSmsUrl($documentId)                                                                        | Fonction qui retourne le lien de de la prochaine signature OTP                            |
-| history($documentId)                                                                          | Retourne l'historique de signatures d'un document                                         |
-| dynamicCircuit($document, $steps, $OTPSteps, $emailDestinataire = "", $comment = "")          | Permet d'envoyer un document dans un circuit dynamique                                    |
-| uploadDocument($document, $label, $comment = "", $emailDestinataires = [], $circuitId = null) | Envoi un document dans un circuit de signature                                            |
-| downloadDocument($id)                                                                         | Permet de récupérer le contenu d'un document                                              |
-| archive($documentId, $dir = null)                                                             | Archive un document dans le dossier définit dans les paramètres                           |
+| Fonction                                                                                      | Description                                                                                                                                                       |
+| --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| getSignInfo($documentiId)                                                                     | Retourne les infos sur la signature d'un document (message de rejet, nb de signatures...)                                                                         |
+| exportUsersData()                                                                             | Retourne tous les utilisateurs inscrits sur Docapost (données brutes de Docapost)                                                                                 |
+| getUsers():                                                                                   | Retourne les utilisateurs inscrits sur Docapost                                                                                                                   |
+| getUsersCertificate():                                                                        | Retourne les utilisateurs ayant un certificat RGS\*\*                                                                                                             |
+| delete($documentId)                                                                           | Fonction permettant de supprimer un document                                                                                                                      |
+| getRefusalMessage($documentId)                                                                | Fonction qui renvoie le message de refus d'un document                                                                                                            |
+| getFdc($documentId)                                                                           | Fonction qui retourne le contenu de la fiche de circulation                                                                                                       |
+| getSmsUrl($documentId)                                                                        | Fonction qui retourne le lien de de la prochaine signature OTP                                                                                                    |
+| history($documentId)                                                                          | Retourne l'historique de signatures d'un document                                                                                                                 |
+| dynamicCircuit($document, $steps, $OTPSteps, $emailDestinataire = "", $comment = "")          | Permet d'envoyer un document dans un circuit dynamique                                                                                                            |
+| uploadDocument($document, $label, $comment = "", $emailDestinataires = [], $circuitId = null) | Envoi un document dans un circuit de signature                                                                                                                    |
+| downloadDocument($id)                                                                         | Permet de récupérer le contenu d'un document                                                                                                                      |
+| archive($documentId, $dir = null)                                                             | Archive un document dans le dossier définit dans les paramètres                                                                                                   |
+| downloadDocumentAndFDC($documentId)                                                           | Retourne la fusion du document et de la fiche de circulation. Attention le document retourné n'est plus certifié. Cette fonction nécéssite le package ghostscript |
 
 #### Utilisation de la fonction dynamicCircuit
 
 La fonction dynamicCircuit permet d'envoyer un document dans un circuit dynamique, avec en paramètre :
+
 - $document : le chemin vers le fichier à envoyer
 - $steps : les étapes du circuit de signature, sous la forme suivante :
+
 ```
     [
         ["step" => "signature", "members" => ["email1@test.fr", "email2@test.fr]],
@@ -76,7 +79,6 @@ La fonction dynamicCircuit permet d'envoyer un document dans un circuit dynamiqu
 
     ]
 ```
-
 
 - $otpSteps : Le paramètrave des étapes OTP :
 
@@ -94,10 +96,13 @@ La fonction dynamicCircuit permet d'envoyer un document dans un circuit dynamiqu
         ],
     ]
 ```
+
 - emailDestinataire: la liste des emails qui recevront le document signé sous la forme d'un tableau ou d'une chaine de caractères (les mails doivent être séparés par un ";")
 
 #### Utilisation de la fonction uploadDocument
+
 La fonction dynamicCircuit permet d'envoyer un document dans un circuit statique, avec en paramètre :
+
 - $document : le chemin vers le fichier à envoyer
 - $label : Un label permettant de classer le document
 - $comment : un commentaire (par défaut '')

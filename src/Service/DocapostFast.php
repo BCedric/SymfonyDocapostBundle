@@ -396,4 +396,29 @@ class DocapostFast
 
         return file_get_contents($dir . '/' . $filename . ".zip");
     }
+
+    public function downloadDocumentAndFDC(
+        string $docapost_id,
+    ) {
+        $documentContent = $this->downloadDocument($docapost_id);
+        if ($documentContent == null) {
+            return throw new Exception("File note found", 404);
+        }
+        $fdcContent = $this->getFdc($docapost_id);
+        $docPath = '/tmp/doc' . $docapost_id;
+        $fdcPath = '/tmp/fdc' . $docapost_id;
+        $resPath = '/tmp/res' . $docapost_id;
+        file_put_contents($docPath, $documentContent);
+        file_put_contents($fdcPath, $fdcContent);
+
+        $cmd = "gs -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=$resPath $docPath $fdcPath";
+        exec($cmd, $output, $resultcode);
+
+        $content = file_get_contents($resPath);
+        unlink($fdcPath);
+        unlink($docPath);
+        unlink($resPath);
+
+        return $content;
+    }
 }
